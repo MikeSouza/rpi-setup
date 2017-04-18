@@ -1,0 +1,5 @@
+# Ignore downloaded and extracted image files
+raspbian_lite_latest.zip
+*.img
+wpa_supplicant.conf
+
