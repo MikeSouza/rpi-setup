@@ -1,6 +1,8 @@
 #!/bin/bash
 
-img_file="$(ls *-raspbian-*-lite.img)"
+# Use image specified by parameter $1 if not null,
+# otherwise default to the most recent Raspbian Lite image in the cwd
+img_file="${1:-$(ls -t *-raspbian-*-lite.img | head -n 1)}"
 if [ ! -s "${img_file}" ]; then
 	echo "Image '${img_file}' not found." >&2
 	exit 1
@@ -27,4 +29,15 @@ sudo diskutil umount "${part_id}"
 rdisk_dev="/dev/rdisk${disk_num}"
 echo "Writing image to SD card (${rdisk_dev})..."
 sudo dd bs=1m if="${img_file}" of="${rdisk_dev}"
+
+while true; do
+  mount_point=$(diskutil info ${part_id} | grep -Po '(?<=Mount Point:).*' | sed -e 's/^[ \t]*//')
+	if [ -d "${mount_point}" ]; then
+    vol_id=$(diskutil info ${part_id} | grep -Po '(?<=Volume UUID:).*' | sed -e 's/^[ \t]*//')
+		echo "Mounted volume ${vol_id} on ${mount_point}"
+		break
+	fi
+
+	sleep 1
+done
 
