@@ -1,5 +1,15 @@
 # Ignore downloaded and extracted image files
 raspbian_lite_latest.zip
 *.img
+
+# Ignore Wi-Fi configuration
 wpa_supplicant.conf
 
+# Ignore backup/ temp files and directories
+*.bak
+
+# Ignore downloaded Ansible roles
+ansible/roles/
+
+# Ignore Ansible retry files
+*.retry
