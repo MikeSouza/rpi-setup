@@ -1,5 +1,11 @@
 #!/bin/bash
 
+usage="Usage: $0 mount_point ip_address gateway netmask hostname interface"
+if [ "$#" == "0" ]; then
+	echo "${usage}"
+	exit 1
+fi
+
 mount_point=${1:-"/Volumes/boot"}
 if ! ls "${mount_point}" &>/dev/null; then
 	echo "SD card with Raspbian not mounted at ${mount_point}." >&2
@@ -7,10 +13,21 @@ if ! ls "${mount_point}" &>/dev/null; then
 fi
 
 ipaddr=${2:-"192.168.1.200"}
-hostname=${3:-"rpi0"}
-ethconf="ip=${ipaddr}::192.168.1.1:255.255.255.0:${hostname}:eth0:off"
-echo "Configuring Ethernet..."
-sed "s/$/ ${ethconf}/" "${mount_point}/cmdline.txt" > tmpfile
+gateway=${3:-"192.168.1.1"}
+subnet=${4:-"255.255.0.0"}
+hostname=${5:-"rpi0"}
+interface=${6:-"eth0"}
+
+if [ "$#" == "6" ]; then
+	autoconf=off
+else
+	autoconf=on
+fi
+
+netconf="ip=${ipaddr}::${gateway}:${subnet}:${hostname}:${interface}:${autoconf}"
+
+echo "Configuring LAN..."
+sed "s/$/ ${netconf}/" "${mount_point}/cmdline.txt" > tmpfile
 mv tmpfile "${mount_point}/cmdline.txt"
 
 echo "Configuring SSH..."

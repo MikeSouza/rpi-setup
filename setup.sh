@@ -1,11 +1,15 @@
 #!/bin/bash
 
-usage="Usage: $0 image_file ip_addr hostname"
-if [ "$#" == "0" ]; then
-	echo "${usage}"
-	exit 1
-fi
+mount_point=/Volumes/boot
 
-./create_sdcard.sh $1
+for i in {0..2}
+do
+	read -p "Insert SD card for Raspberry Pi, press ENTER when ready... "
 
-./configure_boot.sh '' $2 $3
+	./setup_rpi.sh '' "192.168.227.10${i}" 192.168.227.1 255.255.0.0 "rpi${i}" eth0
+
+  read -p "\nPress ENTER to continue or CTRL+C to exit... \n"
+	sudo umount "${mount_point}"
+done
+
+
