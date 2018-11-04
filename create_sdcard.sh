@@ -19,7 +19,7 @@ fi
 disk_id="disk${disk_num}"
 disk_dev="/dev/${disk_id}"
 echo "Formatting SD card (${disk_dev})..."
-sudo diskutil eraseDisk FAT32 "JESSIE_LITE" MBRFormat "${disk_dev}"
+sudo diskutil eraseDisk FAT32 "RASPBIAN" MBRFormat "${disk_dev}"
 
 part_id="${disk_id}s1"
 part_dev="/dev/${part_id}"
