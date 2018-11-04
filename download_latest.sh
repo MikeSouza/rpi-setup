@@ -6,4 +6,7 @@ echo "Download latest Raspbian Lite release..."
 curl -L https://downloads.raspberrypi.org/raspbian_lite_latest -o "${out_file}"
 
 echo "Unzip latest Raspbian Lite release..."
-unzip "${out_file}"
+unzip -o "${out_file}"
+
+echo "Delete ${out_file}..."
+rm -f "${out_file}"
